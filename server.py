@@ -1,10 +1,10 @@
 from flask_app import app
 from flask_app.controllers import admin
-<<<<<<< HEAD
+# <<<<<<< HEAD
 from flask_app.controllers import panda_script
-=======
+# =======
 from flask_app.models.voter import Voter
->>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
+# >>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
 # from flask_app.controllers import users_controller
 # from flask_app.controllers import sasquatch_controller
 

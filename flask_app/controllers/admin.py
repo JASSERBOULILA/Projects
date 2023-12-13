@@ -3,7 +3,8 @@ from flask import render_template, redirect, session, flash, request
 from flask_app.models.admin import Admin
 from flask_app.models.voter import Voter
 from flask_app.models.candidate import Candidate
-<<<<<<< HEAD
+from flask_app.models.voter import Vote
+# <<<<<<< HEAD
 from flask_app.models.img import Img
 import pandas as pd
 from flask_bcrypt import Bcrypt
@@ -17,7 +18,7 @@ import plotly.express as px
 
 # create a bcrypt variable to acces to the Bcrypt class and use the function to hash the password
 bcrypt = Bcrypt(app)
-=======
+# =======
 # import pandas as pd
 from flask_bcrypt import Bcrypt
 from flask import jsonify
@@ -41,7 +42,7 @@ from flask import jsonify
 # fig.show()
 # html_file_path = 'plotly_chart.html'
 # pyo.plot(fig, filename=html_file_path, auto_open=False)
->>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
+# >>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
 
 
 # to show the main page
@@ -49,6 +50,9 @@ from flask import jsonify
 def index():
     return render_template("index.html")
 
+@app.route('/index1')
+def index1():
+    return render_template('index1.html')
 
 @app.route('/show/candidate/plotly.html')
 def show_plotly():
@@ -90,10 +94,37 @@ def login_candidate_():
     ):
         flash("the Password Is Invalid please Try again", "login")
         return redirect("/login/candidate")
+    if candidate_from_db.first_time==1:
+        return redirect('/candidate_change_password')
     # if candidate_from_db.is_banned==1:
     #     return redirect('/yourebanned')
     return redirect(f"/show/candidate/{candidate_from_db.id}")
 
+
+@app.route('/candidate_change_password')
+def change_candidate_password():
+    return render_template('candidate_change_password.html')
+
+
+
+@app.route('/login/candidate/change_password/<int:id>',methods=['POST'])
+def change_candidate(id):
+    candidate=Candidate.get_candidate_by_id({"id":id})
+    data={
+        **request.form,"id":id
+    }
+    if validate_the_new_password(request.form['new_password']) and request.form['new_password']==request.form['confirm_password']:
+        if  not bcrypt.check_password_hash(candidate.password,request.form['password']):
+            flash('the password you just Entered is not the older password pls try again')
+            return redirect('/voter_change_password')
+        if request.form['new_password']!=request.form['confirm_password']:
+            flash('the password you just Entered in not the same Check Pls')
+            return redirect('/voter_change_password')
+        pw_hash=bcrypt.generate_password_hash(request.form['new_password'])
+        data={**request.form,"password":pw_hash,"id":id}
+        Candidate.update_first(data)
+        return redirect('/login/candidate')
+    return render_template('candidate_change_password.html')
 
 # to validate the select where to locate him
 @app.route("/validate", methods=["POST"])
@@ -179,7 +210,8 @@ def change_password(id):
     print(request.form['new_password'])
     if validate_the_new_password(request.form['new_password']) and request.form['new_password']==request.form['confirm_password']:
         if  not bcrypt.check_password_hash(voter.password,request.form['password']):
-            flash('the password you just enterd is not the older password pls try again')
+            flash('the password you just entered is not the older password pls try again')
+            # login/change_password/4
             return redirect('/voter_change_password')
         if request.form['new_password']!=request.form['confirm_password']:
             flash('the password you just entere in not the same Check Pls')
@@ -188,7 +220,7 @@ def change_password(id):
         data={**request.form,"password":pw_hash,"id":id}
         Voter.update_first(data)
         return redirect('/login/voter')
-    return render_template('change_password.html')
+    return  redirect('/voter_change_password')
 
 
 @app.route("/candidates")
@@ -309,7 +341,8 @@ def edit_thsi_plan_after(id):
         "last_name":candidate.last_name,
         "email":candidate.email,
         "password":candidate.password,
-        "birthdate":candidate.birthdate,"region":candidate.region,
+        "region":candidate.region,
+        "age":candidate.age
     }
     if Candidate.validate(data) or Img.validate(data):
         Candidate.update_whole({"id":id,"bio":request.form['bio'],"plan":request.form['plan']})
@@ -343,7 +376,7 @@ def logout():
     return redirect("/")
 
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
 
 
 
@@ -363,23 +396,41 @@ def validate_the_new_password(password):
             countnumber+=1
     if countM==0 or countm==0 or countnumber==0:
         is_valid=False
+        flash("password must contain upper lower and number")
     return is_valid
-=======
+# =======
 @app.route('/vote',methods=['POST'])
 def voter():
-    data={
-        **request.form
-    }
-    res=Voter.vote(data)
-    return res
-    
+    return redirect('/vote')
+
 @app.route('/show/candidate/votes/<int:id>')
 def show_the_candidate_votes(id):
     vote_count = Candidate.get_candidate_votes({"id": id})
-    
-
     if vote_count is not None:
         return jsonify({'candidate_id': id, 'vote_count': vote_count})
     else:
         return jsonify({'message': 'No votes found for the candidate ','candidat':id}), 404
->>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
+    
+@app.route('/vote')
+def vote():
+    all_candidates = Candidate.get_all()
+    all_voters=Voter.get_by_id({"id":session['voter_id']})
+    return render_template('vote.html' , all_candidates=all_candidates,all_voters=all_voters)
+
+# @app.route('/vote/new' , methods=['POST'])
+# def vote():
+#     voter_reg = Voter.get_by_id({'id' : session['voter_id']})
+#     reg = voter_reg.region
+
+
+@app.route('/vote/new', methods=['POST'])
+def create_vote():
+    voter_reg = Voter.get_by_id({'id': session['voter_id']})
+    reg = voter_reg.region
+    all_voter=Vote.voter_get_all()
+    if reg:  
+        candidate_id = int(request.form.get('flexRadioDefault'))
+        vote_data = {'vote_id': session['voter_id'], 'condidate_id': candidate_id,'region' : reg}
+        success = Voter.new_vote(vote_data)
+        Voter.update_vote({"id":session['voter_id']})
+    return redirect('/vote')

@@ -17,13 +17,15 @@ class Candidate:
         self.age=data['age']
         self.password=data['password']
         self.plan=data['plan']
+        self.first_time=data['first_time']
+        self.is_banned=data['is_banned']
         # self.candidate_id=data['candidate_id']
     @classmethod
     def create(cls,data):
         query="""INSERT INTO condidates
-        (first_name,last_name,email,password,age,region,bio) VALUES
+        (first_name,last_name,email,password,age,region,bio,is_banned,first_time) VALUES
                 (%(first_name)s,%(last_name)s,%(email)s,%(password)s
-                ,%(age)s,%(region)s,%(bio)s);"""
+                ,%(age)s,%(region)s,%(bio)s,0,1);"""
         return connectToMySQL(database).query_db(query,data)
     
     @classmethod
@@ -41,6 +43,11 @@ class Candidate:
         if db_result:
             return cls(db_result[0])
         return None
+    
+    @classmethod
+    def update_first(cls,data):
+        query="""UPDATE condidates SET first_time=0,password=%(password)s WHERE id=%(id)s;"""
+        return connectToMySQL(database).query_db(query,data)
     @classmethod
     def get_candidate_by_id(cls,data):
         query="""SELECT * FROM condidates WHERE id=%(id)s;"""
@@ -48,11 +55,11 @@ class Candidate:
         if db_result:
             return cls(db_result[0])
         return None
-<<<<<<< HEAD
+# <<<<<<< HEAD
     @classmethod
     def update(cls,data):
         print("<😡😡"*10, data,"😡😡"*10)
-        query=""" UPDATE condidates SET first_name=%(first_name)s,last_name=%(last_name)s WHERE id=%(id)s;"""
+        query=""" UPDATE condidates SET first_name=%(first_name)s,last_name=%(last_name)s,email=%(email)s,age=%(age)s,region=%(region)s WHERE id=%(id)s;"""
         return connectToMySQL(database).query_db(query,data)
     @classmethod
     def update_plan(cls,data):
@@ -63,7 +70,7 @@ class Candidate:
     def update_whole(cls,data):
         query="""UPDATE condidates SET bio=%(bio)s,plan=%(plan)s WHERE id=%(id)s;"""
         return connectToMySQL(database).query_db(query,data)
-=======
+# =======
     
     @classmethod
     def get_candidate_votes(cls, data):
@@ -75,7 +82,7 @@ class Candidate:
             return db_result[0]['vote_count']
         return None
     
->>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
+# >>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
     @staticmethod
     def validate(data):
         is_valid=True
@@ -93,7 +100,7 @@ class Candidate:
             flash('please select your region')
         if data['age']=="":
             is_valid=False
-            flash('please insert your birthday')
+            flash('please insert your age')
         if len(data['password'])<8:
             for i in range(len(data['password'])):
                 if "A"<data['password'][i]<"Z":
