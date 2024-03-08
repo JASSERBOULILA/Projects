@@ -1,3 +1,6 @@
 [submodule "Portfolio/Jasser"]
 	path = Portfolio/Jasser
 	url = https://github.com/JASSERBOULILA/Projects
+[submodule "PythonProject"]
+	path = PythonProject
+	url = https://github.com/JASSERBOULILA/repository.git
