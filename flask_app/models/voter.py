@@ -16,6 +16,7 @@ class Voter:
         self.vote=data['vote']
         self.age=data['age']
         self.password=data['password']
+<<<<<<< HEAD
         self.is_banned=data['is_banned']
         self.first_time=data['first_time']
         # self.new_password=data['new_password']
@@ -29,13 +30,19 @@ class Voter:
         return connectToMySQL(database).query_db(query,data)
 # =======
         
+=======
+        self.is_banned = data['is_banned']
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
     @classmethod
     def create(cls,data):
         query="""INSERT INTO voters
         (first_name,last_name,email,password,age,region,cin,vote,is_banned) VALUES
                 (%(first_name)s,%(last_name)s,%(email)s,%(password)s,%(age)s
                 ,%(region)s,%(cin)s,0,0);"""
+<<<<<<< HEAD
 # >>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
+=======
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
         return connectToMySQL(database).query_db(query,data)
     
     @classmethod
@@ -61,7 +68,6 @@ class Voter:
         for row in db_result:
             all_voters.append(row)
         return all_voters
-    
     @classmethod
     def get_voter_by_email(cls,data):
         query="""SELECT * FROM voters WHERE email =%(email)s;"""
@@ -69,6 +75,7 @@ class Voter:
         if db_result:
             return cls(db_result[0])
         return None
+<<<<<<< HEAD
     
     @classmethod
     def get_voter_by_id(cls,data):
@@ -78,12 +85,15 @@ class Voter:
             return cls(db_result[0])
         return None
     
+=======
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
     @staticmethod
     def update(data):
         query="""
             UPDATE voters SET is_banned=%(x)s WHERE id=%(id)s;
             """ 
         return connectToMySQL(database).query_db(query,data)
+<<<<<<< HEAD
     @classmethod
     def update_first_time(cls,data):
         query="""UPDATE voters SET first_time=%(first_time)s WHERE id=%(id)s;"""
@@ -96,6 +106,8 @@ class Voter:
     def update_vote(cls,data):
         query="""UPDATE voters SET vote=1 WHERE id=%(id)s;"""
         return connectToMySQL(database).query_db(query,data)
+=======
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
     @staticmethod
     def validate(data):
         is_valid=True
@@ -111,9 +123,15 @@ class Voter:
         if data['region']=="Select your region":
             is_valid=False
             flash('please select your region')
+<<<<<<< HEAD
         if data['age']=="" or int(data['age'])<18:
             is_valid=False
             flash('please insert your birthday and 18 years old at least')
+=======
+        if int(data['age'])<18:
+            is_valid=False
+            flash("your age must be at leats 18")
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
         if len(data['password'])<8:
             for i in range(len(data['password'])):
                 if "A"<data['password'][i]<"Z":
@@ -125,6 +143,7 @@ class Voter:
             if countM==0 or countm==0:
                 is_valid=False
                 flash('Must contain at least one Upper Case and one Camel Case and one number')
+<<<<<<< HEAD
         if len(data['cin'])<8:
             flash('Please Insert Correctly Your Cin Number')
             is_valid=False
@@ -174,3 +193,15 @@ class Vote:
         for row in db_result:
             count.append(row)
         return count
+=======
+        for i in range(len(Voter.get_all())):
+            print(Voter.get_all()[i])
+            print(Voter.get_all()[i]['cin'])
+            print(data['cin'])
+            if data['cin'] == Voter.get_all()[i]['cin']:
+                is_valid=False
+                flash('this Id already Exit')
+                print(is_valid)
+                break
+        return is_valid     
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e

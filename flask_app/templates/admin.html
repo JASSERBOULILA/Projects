@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontawesome-all.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iofrm-style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iofrm-theme4.css') }}">
+    <title>Document</title>
 </head>
+<<<<<<< HEAD
 <body style="background-color: #dfe8f0;">
     <div class="form-body" class="container-fluid">
         <div class="website-logo">
@@ -80,5 +77,47 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/popper.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+=======
+<body>
+    <img src="" alt="">
+    <h1>WebsiteName</h1>
+    {%if session['role']=="admin"%}
+        <form action="/login" method="post">
+            <h2>Login</h2>
+            {% for message in get_flashed_messages()%}
+                <li class="h6 text-danger">{{message}}</li>
+            {%endfor%}
+            <label for="Email">Email</label>
+            <input type="text" name="email">
+            <label for="Password">Password</label>
+            <input type="password" name="password">
+            <button type="submit">Login</button>
+        </form>
+    {%elif session['role']=="voter"%}
+        <form action="/login/voter" method="post">
+            <h2>Login</h2>
+            {% for message in get_flashed_messages()%}
+                <li class="h6 text-danger">{{message}}</li>
+            {%endfor%}
+            <label for="Email">Email</label>
+            <input type="text" name="email">
+            <label for="Password">Password</label>
+            <input type="password" name="password">
+            <button type="submit">Login</button>
+        </form>
+    {%else%}
+        <form action="/login/candidate" method="post">
+            <h2>Login</h2>
+            {% for message in get_flashed_messages()%}
+                <li class="h6 text-danger">{{message}}</li>
+            {%endfor%}
+            <label for="Email">Email</label>
+            <input type="text" name="email">
+            <label for="Password">Password</label>
+            <input type="password" name="password">
+            <button type="submit">Login</button>
+        </form>
+    {%endif%}
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
 </body>
 </html>

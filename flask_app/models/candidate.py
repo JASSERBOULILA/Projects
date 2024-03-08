@@ -16,9 +16,12 @@ class Candidate:
         self.region=data['region']
         self.age=data['age']
         self.password=data['password']
+<<<<<<< HEAD
         self.plan=data['plan']
         self.first_time=data['first_time']
         self.is_banned=data['is_banned']
+=======
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
         # self.candidate_id=data['candidate_id']
     @classmethod
     def create(cls,data):
@@ -54,9 +57,11 @@ class Candidate:
     def get_candidate_by_id(cls,data):
         query="""SELECT * FROM condidates WHERE id=%(id)s;"""
         db_result=connectToMySQL(database).query_db(query,data)
+        print(db_result, data)
         if db_result:
             return cls(db_result[0])
         return None
+<<<<<<< HEAD
 # <<<<<<< HEAD
     @classmethod
     def update(cls,data):
@@ -73,18 +78,23 @@ class Candidate:
         query="""UPDATE condidates SET bio=%(bio)s,plan=%(plan)s WHERE id=%(id)s;"""
         return connectToMySQL(database).query_db(query,data)
 # =======
+=======
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
     
     @classmethod
     def get_candidate_votes(cls, data):
         print(data)
-        query = "SELECT COUNT(*) AS vote_count FROM votes WHERE condidate_id =%(id)s;"
+        query = "SELECT COUNT(*) AS vote_count,region FROM votes WHERE condidate_id =%(id)s group by region;"
         db_result = connectToMySQL(database).query_db(query, data)
         print(db_result)
-        if db_result and 'vote_count' in db_result[0]:
-            return db_result[0]['vote_count']
+        if db_result:
+            return db_result
         return None
     
+<<<<<<< HEAD
 # >>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
+=======
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
     @staticmethod
     def validate(data):
         is_valid=True
@@ -100,9 +110,13 @@ class Candidate:
         if data['region']=="Select your region":
             is_valid=False
             flash('please select your region')
-        if data['age']=="":
+        if data['age']=="" or int(data['age'])<18:
             is_valid=False
+<<<<<<< HEAD
             flash('please insert your age')
+=======
+            flash('please insert your age and must be 18 years old')
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
         if len(data['password'])<8:
             for i in range(len(data['password'])):
                 if "A"<data['password'][i]<"Z":
@@ -117,14 +131,20 @@ class Candidate:
         if len(data['bio'])<10:
             flash('the bio must be at least 10 string long')
             is_valid=False
+<<<<<<< HEAD
         alpha=Candidate.get_all()
         for row in alpha:
             print(row)
             print(data['email'])
             print(row.email)
             if data['email']==row.email:
+=======
+        for i in range(len(Candidate.get_all())):
+            print(Candidate.get_all()[i])
+            print(Candidate.get_all()[i]['email'])
+            if data['email']==Candidate.get_all()[i]['email']:
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
                 is_valid=False
                 flash('email already exist so pls try another one ')
                 break
         return is_valid
-    

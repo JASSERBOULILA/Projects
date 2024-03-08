@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fontawesome-all.min.css') }}">
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iofrm-style.css') }}"> -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style-admin.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <title>Document</title>
 </head>
+<<<<<<< HEAD
 
 <body style="background-color: #dfe8f0;">
     <div class="form-header" style="color: rgb(16, 52, 95);">
@@ -210,6 +205,24 @@
             transition: transform 0.15s 0.45s linear;
         }
     </style>
+=======
+<body>
+    <form action="/logout"method="post">
+        <button type="submit">Logout</button>
+    </form>
+    <h1>Welcome Admin</h1>
+    <form action="/admin/created">
+        <button type="submit">Create Voter</button>
+    </form>
+    <form action="/admin/candidate">
+        <button type="submit">Create Candidate</button>
+    </form>
+    <form action="/candidates">
+        <button type="submit">Candidates</button>
+    </form>
+    <form action="/admin/dashboard/voters">
+        <button type="submit">Voters</button>
+    </form>
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
 </body>
-
 </html>

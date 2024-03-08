@@ -15,6 +15,7 @@
     </fieldset>
     <div class="container">
     {%for candidate in candidates%}
+<<<<<<< HEAD
         {%for row in img_src%}
             {%if row.condidate_id==candidate.id%}
                     <fieldset class="cand">
@@ -32,6 +33,16 @@
                 </div>
     <form class="vote" action="/vote">
         <button class="btn btn-secondary" style="width: 100px;">Vote</button>
+=======
+        <div class="candidats">
+            <textarea name="bio"  cols="30" rows="10">{{candidate.bio}}</textarea>
+            <img src="{{candidate.img}}" alt="candidate">
+            <a href="/show/{{candidate.id}}">show bio and info</a>
+        </div>
+    {%endfor%}
+    <form action="/vote" method="post">
+        <button type="submit">Vote</button>
+>>>>>>> f570e20223b5a03da6c264e00d5e12469755557e
     </form>
 </body>
 </html>
