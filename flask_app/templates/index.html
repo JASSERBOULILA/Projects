@@ -41,7 +41,7 @@
         <ul>
           <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
           <li><a class="nav-link scrollto" href="#about">About</a></li>
-          <li><a class="nav-link scrollto" href="#values">Elections</a></li>
+          <li><a class="nav-link scrollto" href="#values">F.A.Q</a></li>
           <li><a class="nav-link scrollto" href="#counts">Stats</a></li>
           <li><a class="nav-link scrollto" href="#portfolio">Gallery</a></li>
           <li><a class="nav-link scrollto" href="#team">Team</a></li>
@@ -60,7 +60,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 d-flex flex-column justify-content-center">
-          <h1 data-aos="fade-up">Take a first step to
+          <h1 data-aos="fade-up">Take a first step to a
             better life</h1>
           <h2 data-aos="fade-up" data-aos-delay="400">NEW LEADERS FOR NEW GENERATION</h2>
           <div data-aos="fade-up" data-aos-delay="600">
@@ -84,28 +84,31 @@
   <main id="main">
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
-
-      <div class="container" data-aos="fade-up">
-        <div class="row gx-0">
-
-          <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
-            <div class="content">
-              <h3>Candidate Number 1</h3>
-              <h2>Candidate Name</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit soluta quisquam iure ipsa? Sequi doloribus mollitia consequatur sapiente quae eaque facilis? Magnam voluptatibus molestias harum assumenda facere laudantium nobis veniam.
-              </p>
-            </div>
+    {%for img in img_src%}
+      {%for row in all_candidate%}
+        {%if img.condidate_id == row.id%}
+          <div class="container" data-aos="fade-up">
+              <div class="row gx-0">
+                <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                  <div class="content">
+                    <h3>Candidate Number {{row.id}}</h3>
+                    <h2>Candidate {{row.first_name}} {{row.last_name}}</h2>
+                    <p>
+                      {{row.bio}}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+                    <img src="{{ url_for('static', filename='images/'+img.file) }}" class="img-fluid" alt="{{row.id}}">
+                </div>
+              </div>
           </div>
-          <div class="col-lg-6 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
-            <img src="static/images/about.jpg" class="img-fluid" alt="">
-          </div>
+        {%endif%}
+      {%endfor%}
+    {%endfor%}
 
-        </div>
-      </div>
-      <div class="container" data-aos="fade-up">
+      <!-- <div class="container" data-aos="fade-up">
         <div class="row gx-0">
-
           <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
             <div class="content">
               <h3>Candidate Number 2</h3>
@@ -121,7 +124,7 @@
           </div>
 
         </div>
-      </div>
+      </div> -->
 
     </section><!-- End About Section -->
 
@@ -568,7 +571,7 @@
           <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
             <div class="member">
               <div class="member-images">
-                <img src="static/images/team/team-4.jpg" class="img-fluid" alt="">
+                <img src="static/images/tas.jpg" class="img-fluid" alt="">
                 <div class="social">
                   <a href="https://www.facebook.com/tasnime.balti"><i class="bi bi-facebook"></i></a>
                 </div>
@@ -584,7 +587,7 @@
           <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
             <div class="member">
               <div class="member-images">
-                <img src="static/images/team/team-4.jpg" class="img-fluid" alt="">
+                <img src="static/images/rayene.jpg" class="img-fluid" alt="">
                 <div class="social">
                   <a href="https://www.linkedin.com/in/mohamed-rayen-khmiri-0b925529a/"><i class="bi bi-linkedin"></i></a>
                 </div>
@@ -653,7 +656,6 @@
           <div class="col-lg-6">
             <form action="forms/contact.php" method="post" class="php-email-form">
               <div class="row gy-4">
-é
                 <div class="col-md-6">
                   <input type="text" name="name" class="form-control" placeholder="Your Name" required>
                 </div>
@@ -714,7 +716,7 @@
             <ul>
               <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
               <li><a class="nav-link scrollto" href="#about">About</a></li>
-              <li><a class="nav-link scrollto" href="#values">Elections</a></li>
+              <li><a class="nav-link scrollto" href="#values">F.A.Q</a></li>
               <li><a class="nav-link scrollto" href="#counts">Stats</a></li>
               <li><a class="nav-link scrollto" href="#portfolio">Gallery</a></li>
               <li><a class="nav-link scrollto" href="#team">Team</a></li>

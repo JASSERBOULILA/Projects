@@ -21,16 +21,23 @@ class Admin:
         if db_result<1:
             return False
         return True
+    @classmethod
+    def get_all(cls):
+        query="""SELECT * FROM admins;"""
+        db_result=connectToMySQL(database).query_db(query)
+        if db_result:
+            return cls(db_result[0])
+        return None
     @staticmethod
     def validate(data):
         is_valid=True
         if not email_regex.match(data['email']): 
             flash("Invalid email address!")
             is_valid = False
-        if data['email']!="fakroun@gmail.com":
+        if data['email']!=Admin.get_all().email:
             is_valid=False
             flash('your Email is invalid so pls renter your email',"login")
-        if data['password']!="fakroun123":
+        if data['password']!=Admin.get_all().password:
             flash('your Password is Wrong so Please valid your password',"login")
             is_valid=False
         return is_valid

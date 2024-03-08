@@ -13,21 +13,20 @@
     <title>Document</title>
 </head>
 
-<body>
+<body style="background-color: #dfe8f0;">
     <div class="index-body">
-        <div class="website-logo">
-            <a href="index.html">
-                <div class="logo">
-                    <img class="logo-size" src="{{ url_for('static', filename='images/votelogo.png') }}" alt="">
+                <div class="header">
+                    <div>
+                        <img src="{{ url_for('static', filename='images/logo_1-removebg-preview.png') }}" alt="logousa.png"
+                            id="logo1">
+                    </div>
+                    <h1 style="color: #D83933;text-align: center;">USA Voting And Elections</h1>
+                    <div>
+                        <img src="{{ url_for('static', filename='images/USA.png') }}" alt="logousa.png" id="logo2" style="width: 85%;margin-top: 20px;margin-right: 20px;">
+                    </div>
                 </div>
-            </a>
-        </div>
-        <div class="logo2">
-            <img class="logo-size2" src="{{ url_for('static', filename='images/votelogo.png') }}" alt="">
-        </div>
         <div class="main">
-            <h1 style="color: #D83933;">USA Voting And Elections</h1>
-            <p style="color: #1A4480;">please select your role in this selection</p>
+            <h3 style="color: #1A4480; margin-bottom: 30px;">please select your role in this selection</h3>
             <form action="/validate" method="post" onsubmit="return validateForm()" style="margin-left: 10px;">
                 <select name="role" id="role" style="height: 150%; margin-right: 20px;" onchange="toggleButton()">
                     <option value="select your role" disabled selected>Select your Role</option>
@@ -52,5 +51,57 @@
             </script>
         </div>
     </div>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900");
+
+
+
+*, body {
+    font-family: 'Lato', sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+    height: 90%;
+}
+
+.main{
+    display: flex;
+    flex-direction: column;
+    /* flex-wrap: nowrap; */
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 200px;
+    gap: 10px;
+}
+
+/* .logo2 .logo-size2{
+    width: 110px;
+    margin-top: 40px;
+    margin-left: 30px;
+} */
+
+.btn{
+    background-color: #ccecf2;
+    font-weight: bold;
+    height: 5%;
+}
+
+.btn:hover{
+    background-color: #A7D8E3;
+    font-weight: bold;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50%;
+}
+    </style>
 </body>
 </html>

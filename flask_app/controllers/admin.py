@@ -1,54 +1,68 @@
+import os
+import uuid
 from flask_app import app
 from flask import render_template, redirect, session, flash, request
 from flask_app.models.admin import Admin
 from flask_app.models.voter import Voter
 from flask_app.models.candidate import Candidate
 from flask_app.models.voter import Vote
-# <<<<<<< HEAD
+from flask_app.controllers import panda_script
 from flask_app.models.img import Img
-import pandas as pd
 from flask_bcrypt import Bcrypt
 import plotly.express as px
-# import plotly.offline as pyo
 import pandas as pd
 import plotly.express as px
-
-# Your data
-
+from flask import jsonify
+from werkzeug.utils import secure_filename
+from flask_app import app, ALLOWED_EXTENSIONS, UPLOAD_FOLDER
 
 # create a bcrypt variable to acces to the Bcrypt class and use the function to hash the password
 bcrypt = Bcrypt(app)
-# =======
-# import pandas as pd
-from flask_bcrypt import Bcrypt
-from flask import jsonify
-# import plotly.express as px
-# import plotly.offline as pyo
-
-# Create a dictionary with data
-# data = {
-#     'Name': [],
-#     'Percentage': [],  # Numeric values without '%' symbol
-#     'City': []
-# }
-
-# # Convert the dictionary into a DataFrame
 
 
-# print(df)
-# fig = px.bar(df, x='Name', y='Percentage', hover_data=['City'], barmode='stack')
-# fig.update_traces(texttemplate='%{y}%', textposition='outside')  # Add percentage to bars
-# fig.update_layout(yaxis_tickformat='%') # Show y-axis in percentage format
-# fig.show()
-# html_file_path = 'plotly_chart.html'
-# pyo.plot(fig, filename=html_file_path, auto_open=False)
-# >>>>>>> 3c3bf16395b435605074b89d4d06bb470246df0d
 
+
+
+
+@app.route('/three')
+def three():
+    return render_template('indexhmema.html')
+
+@app.route('/login/indexhmema.html')
+def hmema_alt():
+    return render_template('indexhmema.html')
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.post('/img/pics/insert')
+def insert_pics_to_the_house_to_sell():
+    print("IMAGE FORM-----",request.form)
+    print("IMAGE FiLE-----",request.files)
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        # Generate a UUID for the filename
+        uniquefilename = str(uuid.uuid4()) + '' + filename
+        file.save(os.path.join(UPLOAD_FOLDER, uniquefilename))
+        data = {
+            **request.form,
+            'file': uniquefilename,
+            "condidate_id":session['cand_id']
+        }
+        Img.save(data)
+    return redirect(f'/house/pics_forhouse/{request.form['house_id']}')
 
 # to show the main page
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_candidate=Candidate.get_all()
+    # id=all_candidate.id
+    print(all_candidate)
+    img_src=Img.get_all()
+    return render_template("index.html",all_candidate=all_candidate,img_src=img_src)
 
 @app.route('/index1')
 def index1():
@@ -82,23 +96,26 @@ def candidates_login():
     return render_template("admin.html", session=session)
 
 
-@app.route("/login/candidate", methods=["POST"])
+@app.route("/login/candidate",methods=['POST'])
 def login_candidate_():
     candidate_from_db = Candidate.get_voter_by_email({"email": request.form["email"]})
-    session["candidate_id"] = candidate_from_db.id
-    if not candidate_from_db:
-        flash("Email dosent exit .Pls Try Again", "login")
-        return redirect("/login/candidate")
-    if not bcrypt.check_password_hash(
-        candidate_from_db.password, request.form["password"]
-    ):
-        flash("the Password Is Invalid please Try again", "login")
-        return redirect("/login/candidate")
-    if candidate_from_db.first_time==1:
-        return redirect('/candidate_change_password')
-    # if candidate_from_db.is_banned==1:
-    #     return redirect('/yourebanned')
-    return redirect(f"/show/candidate/{candidate_from_db.id}")
+    if candidate_from_db!=None:
+        session["candidate_id"] = candidate_from_db.id
+        if not candidate_from_db:
+            flash("Email dosent exit .Pls Try Again", "login")
+            return redirect("/login/candidate")
+        if not bcrypt.check_password_hash(
+            candidate_from_db.password, request.form["password"]
+        ):
+            flash("the Password Is Invalid please Try again", "login")
+            return redirect("/login/candidate")
+        if candidate_from_db.first_time==1:
+            return redirect('/candidate_change_password')
+        # if candidate_from_db.is_banned==1:
+        #     return redirect('/yourebanned')
+        return redirect(f"/show/candidate/{candidate_from_db.id}")
+    flash('there is no email like that')
+    return redirect('/login/candidate')
 
 
 @app.route('/candidate_change_password')
@@ -186,7 +203,8 @@ def create():
 # to check the information that the candidat has entered
 @app.route("/admin/create/candidates", methods=["POST"])
 def create_cand():
-    data = {**request.form}
+    data = {**request.form,"email":request.form['email']}
+    print(data)
     if Candidate.validate(data):
         pw_hash = bcrypt.generate_password_hash(request.form["password"])
         data = {**request.form, "password": pw_hash}
@@ -252,18 +270,26 @@ def show_voters():
 @app.route("/login/voter", methods=["POST"])
 def login_voter():
     voter_from_db = Voter.get_voter_by_email({"email": request.form["email"]})
-    if voter_from_db.email!=request.form['email']:
-        flash("Email dosent exit .Pls Try Again", "login")
-        return redirect("/login/voter")
-    if not bcrypt.check_password_hash(voter_from_db.password, request.form["password"]):
-        flash("the Password Is Invalid please Try again", "login")
-        return redirect("/login/voter")
-    if voter_from_db.is_banned == 1:
-        return redirect("/yourebanned")
-    if voter_from_db.first_time==1:
+    print(voter_from_db)
+    if voter_from_db!=None:
         session['voter_id']=voter_from_db.id
-        return redirect(f"/voter_change_password")
-    return redirect("/voter/dashboard")
+        if voter_from_db.email!=request.form['email']:
+            flash("Email doesn't exist, please try again.", "login")
+            return redirect("/login/voter")
+        # if voter_from_db.password!=request.form['password']:
+        #     flash('the password not the same')
+        #     return redirect("/login/voter")
+        if not bcrypt.check_password_hash(voter_from_db.password, request.form["password"]):
+            flash("Password Is Invalid Please Try again", "login")
+            return redirect("/login/voter")
+        if voter_from_db.is_banned == 1:
+            return redirect("/yourebanned")
+        if voter_from_db.first_time==1:
+            session['voter_id']=voter_from_db.id
+            return redirect(f"/voter_change_password")
+        return redirect("/voter/dashboard")
+    flash('Such Email Does not Exist')
+    return redirect('/login/voter')
 #""""""""""""""""
 
 
@@ -323,6 +349,10 @@ def show_the_plan(id):
         return render_template('show_the_plan.html',candidate=candidate,img_src=img_src)
     return redirect('/admin/alphacreated')
 
+
+
+
+# edit the plan for the candidate
 @app.route('/edit/plan/<int:id>')
 def edit_the_plan(id):
     candidate=Candidate.get_candidate_by_id({"id":id})
@@ -331,6 +361,8 @@ def edit_the_plan(id):
         return render_template('edit_the_plan.html',candidate=candidate,img_src=img_src)
     return('/')
 
+
+# to show the plan for the candidate 
 @app.route('/edit/plan/<int:id>',methods=['POST'])
 def edit_thsi_plan_after(id):
     candidate=Candidate.get_candidate_by_id({"id":id})
@@ -349,11 +381,14 @@ def edit_thsi_plan_after(id):
         Img.update({"file":request.form['file'],"condidate_id":session['candidate_id'],"id":id})
         return redirect(f'/show/plan/{id}')
     return redirect(f'/edit/plan/{id}')
+
+
 # this route will show the the dashboard of the voters
 @app.route("/voter/dashboard")
 def show_candidat_voters():
     candidates = Candidate.get_all()
-    return render_template("dashboard_voters.html", candidates=candidates)
+    img_src=Img.get_all()
+    return render_template("dashboard_voters.html", candidates=candidates,img_src=img_src)
 
 
 # to get back to the old one
@@ -374,13 +409,7 @@ def banned_users(id):
 def logout():
     session.clear()
     return redirect("/")
-
-
 # <<<<<<< HEAD
-
-
-
-
 #this for validations for the new password because we dont have in our database
 def validate_the_new_password(password):
     is_valid=True
@@ -430,7 +459,12 @@ def create_vote():
     all_voter=Vote.voter_get_all()
     if reg:  
         candidate_id = int(request.form.get('flexRadioDefault'))
+        candidate=Candidate.get_candidate_by_id({"id":candidate_id})
         vote_data = {'vote_id': session['voter_id'], 'condidate_id': candidate_id,'region' : reg}
         success = Voter.new_vote(vote_data)
         Voter.update_vote({"id":session['voter_id']})
+        # count=Vote.count_voter({"condidate_id":candidate_id,"vote_id":voter_reg.id})
+        # for i in range(count['all_count']):
+        #     for i in range(count['all_count']):
+        #         panda_script.data['Candidate'][i]=candidate.first_name
     return redirect('/vote')

@@ -125,13 +125,17 @@ class Voter:
             if countM==0 or countm==0:
                 is_valid=False
                 flash('Must contain at least one Upper Case and one Camel Case and one number')
-        for i in range(len(Voter.get_all())):
-            print(Voter.get_all()[i])
-            print(Voter.get_all()[i]['cin'])
-            if data['cin'] == Voter.get_all()[i]['cin']:
-                is_valid=False
-                flash('this Id already Exit')
-                break
+        if len(data['cin'])<8:
+            flash('Please Insert Correctly Your Cin Number')
+            is_valid=False
+        else:
+            for i in range(len(Voter.get_all())):
+                print(Voter.get_all()[i])
+                print(Voter.get_all()[i]['cin'])
+                if  data['cin'] == Voter.get_all()[i]['cin']:
+                    is_valid=False
+                    flash('this Id already Exit')
+                    break
         return is_valid
     @staticmethod
     def validate_new(data):
@@ -158,3 +162,15 @@ class Vote:
         for row in db_result:
             all_votes.append(cls(row))
         return all_votes
+    @classmethod
+    def count_voter(cls,data):
+        query="""SELECT count(*) AS all_count,region 
+        from votes WHERE condidate_id=%(condidate_id)s AND
+        vote_id=%(vote_id)s
+        GROUP BY region HAVING region=%(region)s;"""
+        db_result=connectToMySQL(database).query_db(query,data)
+        count=[]
+        print(count)
+        for row in db_result:
+            count.append(row)
+        return count

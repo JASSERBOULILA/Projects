@@ -1,16 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="rayen.css">
+
     <title>Document</title>
 </head>
+
 <body>
-    <h1>Create the Candidates
-    </h1>
-    <fieldset>
+    <style>
+        body {
+            /* font-family: 'Arial', sans-serif; */
+            margin: 20px;
+            background-color: #dfe8f0;
+            width: 90%;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        h1 {
+            color: rgb(16, 52, 95);
+        }
+
+        fieldset {
+            border: 1px solid #ced4da;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            margin-left: 40px;
+        }
+
+        form {
+            display: grid;
+            grid-gap: 10px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #cb4062;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 15%;
+        }
+
+        button:hover {
+            background-color: #0b3562;
+        }
+
+        .header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50%;
+        }
+
+        #Register{
+            display: flex;
+            margin-left: 30px;
+            justify-content: center;
+        }
+    </style>
+    <div class="header">
+        <div>
+            <img src="{{ url_for('static', filename='images/logo_1-removebg-preview.png') }}" alt="logousa.png"
+                id="logo1">
+        </div>
+        <h1 style="text-align: center;">Create the Candidates </h1>
+        <div>
+            <img src="{{ url_for('static', filename='images/USA.png') }}" alt="logousa.png" id="logo2">
+        </div>
+    </div>
+    <fieldset style="width:50%; position: relative; left: 25%;">
         {% for message in get_flashed_messages()%}
-            <li class="h6 text-danger">{{message}}</li>
+        <li class="h6 text-danger">{{message}}</li>
         {%endfor%}
         <form action="/admin/create/candidates" method="post">
             <input type="text" name="first_name" placeholder="First Name">
@@ -68,15 +152,15 @@
                 <option value="Wisconsin">Wisconsin</option>
                 <option value="Wyoming">Wyoming</option>
             </select>
-            <label for="Birt">Age</label>
-            <input type="number" name="age">
+            <input type="number" name="age" placeholder="Age">
             <input type="password" name="password" placeholder="Password">
-            <textarea name="bio" id="" cols="30" rows="10"></textarea>
-            <button type="submit">Register</button>
+            <textarea name="bio" id="" cols="30" rows="7" placeholder="BIO"></textarea>
+            <button type="submit" id="Register">Register</button>
         </form>
-        <form action="/back" method="post">
+        <form action="/back" method="post" style="position: relative; left: 80%;bottom: 45px;">
             <button type="submit">Back</button>
         </form>
     </fieldset>
+
 </body>
 </html>

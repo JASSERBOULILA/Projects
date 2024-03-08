@@ -1,4 +1,4 @@
-import * as THREE from './node_modules/three';
+import * as THREE from '/three';
 import { OrbitControls } from 'https://unpkg.com/three@0.126.1/examples/jsm/controls/OrbitControls.js'
 
 const scene = new THREE.Scene();
@@ -20,7 +20,7 @@ const camera = new THREE.PerspectiveCamera(
 const canvas = document.getElementById('myCanvas');
 const renderer = new THREE.WebGLRenderer({ canvas:canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
-
+renderer.setClearColor(0xffffff, 1)
 // Add a directional light to the scene
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(0, 1, 1).normalize();

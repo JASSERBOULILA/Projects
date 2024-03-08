@@ -16,16 +16,26 @@ class Img:
     @classmethod
     def get_img_by_candidate_id(cls,data):
         query="""SELECT * FROM images 
-                WHERE condidate_id = %(condidate_id)s and id=%(id)s;"""
+                WHERE condidate_id = %(condidate_id)s;"""
         db_result=connectToMySQL(database).query_db(query,data)
         if db_result:
             return cls(db_result[0])
         return None
+    
+    @classmethod
+    def get_all(cls):
+        query="""SELECT * FROM images;"""
+        all_img=[]
+        db_result=connectToMySQL(database).query_db(query)
+        for row in db_result:
+            all_img.append(cls(row))
+        return all_img
+    
     @classmethod
     def update(cls,data):
         print(data['condidate_id'])
         query="""UPDATE images SET file=%(file)s WHERE
-        condidate_id = %(condidate_id)s and id=%(id)s;"""
+        condidate_id = %(condidate_id)s ;"""
         db_result=connectToMySQL(database).query_db(query,data)
         return db_result
     @staticmethod

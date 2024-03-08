@@ -34,8 +34,10 @@ class Candidate:
         db_result=connectToMySQL(database).query_db(query)
         all_voters=[]
         for row in db_result:
-            all_voters.append(row)
+            all_voters.append(cls(row))
+        print(all_voters)
         return all_voters
+    
     @classmethod
     def get_voter_by_email(cls,data):
         query="""SELECT * FROM condidates WHERE email =%(email)s;"""
@@ -115,8 +117,12 @@ class Candidate:
         if len(data['bio'])<10:
             flash('the bio must be at least 10 string long')
             is_valid=False
-        for i in range(len(Candidate.get_all())):
-            if data['email']==Candidate.get_all()[i]['email']:
+        alpha=Candidate.get_all()
+        for row in alpha:
+            print(row)
+            print(data['email'])
+            print(row.email)
+            if data['email']==row.email:
                 is_valid=False
                 flash('email already exist so pls try another one ')
                 break
